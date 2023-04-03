@@ -97,10 +97,19 @@ def mostrarDatos():
             lista=pickle.load(f)
 
         if len(lista)>0:
-            for i, empleado in enumerate(lista):
-                id=empleado.id
-                if (empleado.nombre==Nombre):
-                    print(f"""                 ╔═══════════╗
+            if (Nombre=="TODOS"):
+                with open("EMPLEADOS.pkl", "rb") as f:
+                    lista=pickle.load(f)
+                    for i in (lista):
+                        id=i.id
+                        print(f"""                ╔════╩═══╗
+╔═══════════════╣ ID: {id}  ╠═════════════════
+║               ╚════════╝""",i)
+            else:
+                for i, empleado in enumerate(lista):
+                    id=empleado.id
+                    if (empleado.nombre==Nombre):
+                        print(f"""                 ╔═══════════╗
 ╔════════════════╣   ID: {id}   ╠════════════════
 ║                ╚═══════════╝
 ║ \t   ■      Nombre: {empleado.nombre}         
@@ -110,26 +119,17 @@ def mostrarDatos():
 ║
 ╚═════════════════════════════════════════════
 
-    """)
-                    break
-                else:
-                    if (i==len(lista)-1):
-                        print("""
-           ╔════════════════════════════════════════════════════════════╗
-═══════════╣    » El nombre es incorrecto, o el empleado no existe.     ║
-           ║      Por favor chequee los datos y vuelva a intentarlo.    ║
-           ╚════════════════════════════════════════════════════════════╝
-           """)
-        
-            if (Nombre=="TODOS"):
-                with open("EMPLEADOS.pkl", "rb") as f:
-                    lista=pickle.load(f)
-                    for i in (lista):
-                        id=i.id
-                        print(f"""                ╔════╩═══╗
-╔═══════════════╣ ID: {id}  ╠═════════════════
-║               ╚════════╝""",i)
-
+        """)
+                        break
+                    else:
+                        if (i==len(lista)-1):
+                            print("""
+            ╔════════════════════════════════════════════════════════════╗
+    ═══════════╣    » El nombre es incorrecto, o el empleado no existe.     ║
+            ║      Por favor chequee los datos y vuelva a intentarlo.    ║
+            ╚════════════════════════════════════════════════════════════╝
+            """)
+            
         else:
             print("No se encontraron empleados. Revise su base de datos de forma externa o consulte a servicio técnico.")
     except FileNotFoundError:
@@ -138,45 +138,45 @@ def mostrarDatos():
 ###############################################################################################################################################
 # Función "Modificar Datos de Empleado":
 
-def modificarDatos():
+# def modificarDatos():
 
-    with open("EMPLEADOS.pkl", "wb") as f:
+#     with open("EMPLEADOS.pkl", "wb") as f:
       
-        Nombre= input("""  
-            ╔═══════════════════════════════════════════════════════════╗
-╔═══════════╣  » Por favor ingrese el nombre del empleado a modificar:  ║
-║           ╚═══════════════════════════════════════════════════════════╝
-║            » """)
-        dato= input("""║ 
-║           ╔═════════════════════════════════════════════╗
-╠═══════════╣  » Por favor ingrese el dato a modificar:   ║
-║           ╚═════════════════════════════════════════════╝
-║            » """)
-        nuevoValor= input(f"""║  
-║           ╔════════════════════════════════════════════════════════
-╠═══════════╣  » Por favor ingrese el nuevo valor de {dato}.            
-║           ╚════════════════════════════════════════════════════════
-║            » """)
+#         Nombre= input("""  
+#             ╔═══════════════════════════════════════════════════════════╗
+# ╔═══════════╣  » Por favor ingrese el nombre del empleado a modificar:  ║
+# ║           ╚═══════════════════════════════════════════════════════════╝
+# ║            » """)
+#         dato= input("""║ 
+# ║           ╔═════════════════════════════════════════════╗
+# ╠═══════════╣  » Por favor ingrese el dato a modificar:   ║
+# ║           ╚═════════════════════════════════════════════╝
+# ║            » """)
+#         nuevoValor= input(f"""║  
+# ║           ╔════════════════════════════════════════════════════════
+# ╠═══════════╣  » Por favor ingrese el nuevo valor de {dato}.            
+# ║           ╚════════════════════════════════════════════════════════
+# ║            » """)
 
-        for i, empleado in enumerate(EMPLEADOS):
-            if (EMPLEADOS[i].nombre==Nombre):
-                setattr(EMPLEADOS[i], dato, nuevoValor)
-                print(f"""║ 
-║           ╔═════════════════════════════════════════════════════════════════════
-╚═══════════╣  » Para el empleado/a: {Nombre} el {dato} ha sido modificado a:                                
-            ║     {getattr(EMPLEADOS[i], dato)}.                                                              
-            ╚═════════════════════════════════════════════════════════════════════
-            """)
-                break
-            else:
-                if (i==len(EMPLEADOS)-1):
-                    print("""║ 
-║           ╔═════════════════════════════════════════════════════════════════════════════════════════════════════════╗
-╚═══════════╣  » El nombre es incorrecto, o el empleado no existe. Por favor chequee los datos y vuelva a intentarlo. ║                                                             ║
-            ╚═════════════════════════════════════════════════════════════════════════════════════════════════════════╝
-             » """)
-                    return
-        pickle.dump(EMPLEADOS, f)
+#         for i, empleado in enumerate(EMPLEADOS):
+#             if (EMPLEADOS[i].nombre==Nombre):
+#                 setattr(EMPLEADOS[i], dato, nuevoValor)
+#                 print(f"""║ 
+# ║           ╔═════════════════════════════════════════════════════════════════════
+# ╚═══════════╣  » Para el empleado/a: {Nombre} el {dato} ha sido modificado a:                                
+#             ║     {getattr(EMPLEADOS[i], dato)}.                                                              
+#             ╚═════════════════════════════════════════════════════════════════════
+#             """)
+#                 break
+#             else:
+#                 if (i==len(EMPLEADOS)-1):
+#                     print("""║ 
+# ║           ╔═════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+# ╚═══════════╣  » El nombre es incorrecto, o el empleado no existe. Por favor chequee los datos y vuelva a intentarlo. ║                                                             ║
+#             ╚═════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+#              » """)
+#                     return
+#         pickle.dump(EMPLEADOS, f)
 
 # #Función "Eliminar Empleado":
 
