@@ -1,10 +1,9 @@
-# BASE DE DATOS: 
 import pickle
 
-def crearBase():
-    EMPLEADOS=[]
-    with open("EMPLEADOS.pkl", "wb") as f:
-        pickle.dump(EMPLEADOS, f)
+# def crearBase():
+#     EMPLEADOS=[]
+#     with open("EMPLEADOS.pkl", "wb") as f:
+#         pickle.dump(EMPLEADOS, f)
 
 ###############################################################################################################################################
 #Main Object: "empleados"
@@ -138,7 +137,8 @@ def mostrarDatos():
 ###############################################################################################################################################
 # Función "Modificar Datos de Empleado":
 
-# def modificarDatos():
+def modificarDatos():
+    return
 
 #     with open("EMPLEADOS.pkl", "wb") as f:
       
@@ -178,27 +178,36 @@ def mostrarDatos():
 #                     return
 #         pickle.dump(EMPLEADOS, f)
 
-# #Función "Eliminar Empleado":
+###############################################################################################################################################
+#Función "Eliminar Empleado":
+def eliminarEmpleado():
 
-# def eliminarEmpleado():
+    try:
+        with open("EMPLEADOS.pkl", "rb") as f:
+            EMPLEADOS=pickle.load(f)
 
-#     Nombre= input("» Por favor ingrese el nombre del empleado que desea eliminar del registro: \n")
+        if len(EMPLEADOS)>0:
+            
+            Nombre= input("» Por favor ingrese el nombre del empleado que desea eliminar del registro: \n")
 
-#     with open("EMPLEADOS.pkl", "wb") as f:
+            with open("EMPLEADOS.pkl", "wb") as f:
 
-#         for i, empleado in enumerate(EMPLEADOS):
-#             if (EMPLEADOS[i].nombre==Nombre):
-#                 del EMPLEADOS[i]
-#                 print(f"El empleado: {Nombre} ha sido eliminado del registro. \n")
-#                 break
-#         else:
-#             if (i==len(EMPLEADOS)-1):
-#                 print("El nombre es incorrecto, o el empleado no existe. Por favor chequee los datos y vuelva a intentarlo. \n")
-#                 return
-#         pickle.dump(EMPLEADOS, f)
+                for i, empleado in enumerate(EMPLEADOS):
+                    if (EMPLEADOS[i].nombre==Nombre):
+                        del EMPLEADOS[i]
+                        print(f"El empleado: {Nombre} ha sido eliminado del registro. \n")
+                        pickle.dump(EMPLEADOS, f)
+                        break
+                    if (i==len(EMPLEADOS)-1):
+                        print("El nombre es incorrecto, o el empleado no existe. Por favor chequee los datos y vuelva a intentarlo. \n")
+        else:
+            print("No se encontraron empleados. Revise su base de datos de forma externa o consulte a servicio técnico.")
 
+    except FileNotFoundError:
+        print("No se encontraron empleados. Revise su base de datos de forma externa o consulte a servicio técnico.")
+
+###############################################################################################################################################
 #Función Menú Principal:
-
 def opciones():
     option=input("""
                  ╔═══════════════════════════════════════════════════════════════╗
@@ -209,7 +218,6 @@ def opciones():
 ║ \t\t   ■      3»  Modificar los datos de un empleado.                                ║    
 ║ \t\t   ■      4»  Eliminar un empleado del registro.                                 ║
 ║ \t\t   ■      5»  Cerrar el programa.                                                ║
-║ \t\t   ■      6»  Crear una nueva base de datos                                      ║
 ║                                                                                                ║
 ╚════════════════════════════════════════════════════════════════════════════════════════════════╝
       » """)
@@ -224,14 +232,13 @@ def opciones():
         eliminarEmpleado()
     elif (option=="5"):
         keepRunning()
-    elif (option=="6"):
-        crearBase()
+    # elif (option=="6"):
+    #     crearBase()
     else:
         print("La opción seleccionada no es válida.\n")
         main()
 
 #Salir del programa:
-
 def keepRunning():
 
     choice=""
@@ -245,10 +252,7 @@ def keepRunning():
         keepRunning()
     return choice
 
-###############################################################################################################################################
-
 #Definición de la Ejecución principal del programa
-
 def main():
 
     while True:
