@@ -1,7 +1,49 @@
 import pickle
 
-###############################################################################################################################################
-#Main Object: "empleados"
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+#Validaciones de entries y funciones de aviso:
+
+def noDataError():
+         
+     print("""
+    ╔═══════════════════════════════════════════════════════════════════════════════╗
+    ║   ■ No se encontraron empleados.                                              ║
+    ║     Revise su base de datos de forma externa o consulte a servicio técnico.   ║
+    ╚═══════════════════════════════════════════════════════════════════════════════╝
+      """)
+     
+def incorrectDataErr():
+
+    print("""
+            ╔════════════════════════════════════════════════════════════╗
+            ║    ■ El nombre es incorrecto, o el empleado no existe.     ║
+            ║      Por favor, chequee los datos y vuelva a intentarlo.   ║
+            ╚════════════════════════════════════════════════════════════╝
+              """)
+
+def validNum(num):
+    while(num.isdigit()==False):
+        num=input("""
+            ╔════════════════════════════════════════════════════╗
+            ║  ■ No es un dato valido.                           ║
+            ║    Por favor, ingrese un numero natural entero:    ║
+            ╚════════════════════════════════════════════════════╝
+              » """)
+    return num
+
+def validStr(str):
+    while(str.isalpha()==False):
+        str=input("""
+            ╔════════════════════════════════════════════════════════════════════════════╗
+            ║  ■ No es un dato valido.                                                   ║
+            ║    Por favor, ingrese sólo palabras, sin números o caracteres especiales:  ║
+            ╚════════════════════════════════════════════════════════════════════════════╝
+              » """)
+    str=str.lower()
+    return str
+
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+# Main Object: "empleados"
 class empleados:
 
     def __init__(self, nombre, cargo, salario, antiguedad):
@@ -14,7 +56,7 @@ class empleados:
                  EMPLEADOS = pickle.load(f)
         except FileNotFoundError:
             EMPLEADOS = []
-        self.id=len(EMPLEADOS)+1
+        self.id=EMPLEADOS[len(EMPLEADOS)-1].id +1
 
     def __str__(self):
         return (f"""                          
@@ -25,37 +67,36 @@ class empleados:
 ║                                         
 ╚════════════════════╦═════════════════════""")
 
-###############################################################################################################################################
-#Función "Crear Empleado":
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+# Función "Crear Empleado":
 def crearEmpleado():
         
-# #Validación de pre-existencia de empleado:
-        # for i, empleado in enumerate(EMPLEADOS):
-        #         if (EMPLEADOS[i].nombre==nombre):
-        #             print(f"El empleado {nombre} ya existe en el registro.\n")
-        #             main() ############Poner algo que cierre el programa al terminar el main() aca BUG ##################
-        ##########################################
+    nombre=input("""║ 
+║
+║   ╔═════════════════════════════════╗
+╠═══╣ » Nombre completo del empleado: ║
+║   ╚═════════════════════════════════╝
+║     » """) 
+    nombre=validStr(nombre)
 
-    nombre=input(""" 
-
-    ╔═══════════════════════════════╗
-╔═══╣ Nombre completo del empleado: ║
-║   ╚═══════════════════════════════╝
-║     » """)
     cargo=input("""║
-║  ╔══════════════════╗
-╠══╣ Cargo que ocupa: ║
-║  ╚══════════════════╝
+║  ╔════════════════════╗
+╠══╣ » Cargo que ocupa: ║
+║  ╚════════════════════╝
 ║     » """)
+    cargo=validStr(cargo)
+    
     salario=input("""║
-║   ╔═══════════╗
-╠═══╣ Salario:  ║
-║   ╚═══════════╝
+║   ╔═════════════╗
+╠═══╣ » Salario:  ║
+║   ╚═════════════╝
 ║     » """)
+    salario=validNum(salario)
+    
     antiguedad=input("""║ 
-║   ╔════════════════════════════╗
-╠═══╣ Antigüedad en la empresa:  ║
-║   ╚════════════════════════════╝
+║   ╔══════════════════════════════╗
+╠═══╣ » Antigüedad en la empresa:  ║
+║   ╚══════════════════════════════╝
 ║     » """)
     
     empleado= empleados(nombre,cargo,salario,antiguedad)
@@ -71,40 +112,110 @@ def crearEmpleado():
 
     print("""║
 ║           ╔══════════════════════════════════════════╗
-╚═══════════╣  » ¡Empleado registrado exitosamente! «  ║
+╚═══════════╣  ■ ¡Empleado registrado exitosamente! «  ║
             ╚══════════════════════════════════════════╝
 """)
 
-###############################################################################################################################################
-#Función "Ver Datos de Empleado":
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+# Función "Ver Datos de Empleado":
 def mostrarDatos():
             
-    Nombre= input(""" 
-           ╔════════════════════════════════════════════════════════════════════╗
-═══════════╣  » Por favor ingrese el nombre del empleado que desea examinar:    ║
+    Nombre= input("""║ 
+║          ╔════════════════════════════════════════════════════════════════════╗
+╚══════════╣  » Por favor ingrese el nombre del empleado que desea examinar:    ║
            ║      (ingrese 'TODOS' para ver la totalidad de la nomina)          ║
            ╚════════════════════════════════════════════════════════════════════╝
              » """)
+    Nombre= validStr(Nombre)
     
     try:
         with open("EMPLEADOS.pkl", "rb") as f:
             lista=pickle.load(f)
 
         if len(lista)>0:
-            if (Nombre=="TODOS"):
+            if (Nombre=="todos"):
                 with open("EMPLEADOS.pkl", "rb") as f:
                     lista=pickle.load(f)
                     for i in (lista):
                         id=i.id
-                        print(f"""                ╔════╩═══╗
-╔═══════════════╣ ID: {id}  ╠═════════════════
+                        #responsiveOptions
+                        if len(str(id))==1:
+                            print(f"""                ╔════╩═══╗
+╔═══════════════╣ ID: {id  }  ╠═════════════════
 ║               ╚════════╝""",i)
+                        elif len(str(id))==2:
+                            print(f"""                ╔════╩═══╗
+╔═══════════════╣ ID: {id  } ╠═════════════════
+║               ╚════════╝""",i)
+                        elif len(str(id))==3:
+                            print(f"""                ╔════╩════╗
+╔═══════════════╣ ID: {id  }  ╠═════════════════
+║               ╚═════════╝""",i)
+                        elif len(str(id))==4:
+                            print(f"""                ╔════╩═════╗
+╔═══════════════╣ ID: {id  }   ╠═════════════════
+║               ╚══════════╝""",i)
             else:
+                repeat=0
+
+            #Nombre repetido
                 for i, empleado in enumerate(lista):
-                    id=empleado.id
-                    if (empleado.nombre==Nombre):
-                        print(f"""                 ╔═══════════╗
-╔════════════════╣   ID: {id}   ╠════════════════
+                    if (lista[i].nombre==Nombre):
+                        repeat+=1
+                if repeat>=2:
+                    #Busqueda por ID forzada
+                    Nombre= input(""" 
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║    » El nombre aparece en múltiples empleados.                          ║   
+    ║      Por favor ingrese el número de ID del empleado que desea mostrar:  ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+      » """)
+                    Nombre= validNum(Nombre)
+                    found=0
+                    for i, empleado in enumerate(lista):
+                        id=empleado.id
+                        
+                        if (id==int(Nombre)):
+                             #responsiveOptions
+                            if len(str(id))==1:
+                                print(f"""                 ╔═══════════╗
+╔════════════════╣   ID: { id }   ╠════════════════
+║                ╚═══════════╝
+║ \t   ■      Nombre: {empleado.nombre}         
+║ \t   ■       Cargo: {empleado.cargo}          
+║ \t   ■     Salario: {empleado.salario}        
+║ \t   ■  Antigüedad: {empleado.antiguedad}
+║
+╚═════════════════════════════════════════════
+
+            """)
+                            elif len(str(id))==2:
+                                print(f"""                 ╔═══════════╗
+╔════════════════╣   ID: { id }  ╠════════════════
+║                ╚═══════════╝
+║ \t   ■      Nombre: {empleado.nombre}         
+║ \t   ■       Cargo: {empleado.cargo}          
+║ \t   ■     Salario: {empleado.salario}        
+║ \t   ■  Antigüedad: {empleado.antiguedad}
+║
+╚═════════════════════════════════════════════
+
+            """)
+                            elif len(str(id))==3:
+                                print(f"""                 ╔═══════════╗
+╔════════════════╣   ID: { id } ╠════════════════
+║                ╚═══════════╝
+║ \t   ■      Nombre: {empleado.nombre}         
+║ \t   ■       Cargo: {empleado.cargo}          
+║ \t   ■     Salario: {empleado.salario}        
+║ \t   ■  Antigüedad: {empleado.antiguedad}
+║
+╚═════════════════════════════════════════════
+
+            """)
+                            elif len(str(id))==4:
+                                print(f"""                 ╔═══════════╗
+╔════════════════╣   ID: { id }╠════════════════
 ║                ╚═══════════╝
 ║ \t   ■      Nombre: {empleado.nombre}         
 ║ \t   ■       Cargo: {empleado.cargo}          
@@ -114,22 +225,74 @@ def mostrarDatos():
 ╚═════════════════════════════════════════════
 
         """)
-                        break
-                    else:
-                        if (i==len(lista)-1):
-                            print("""
-            ╔════════════════════════════════════════════════════════════╗
-    ═══════════╣    » El nombre es incorrecto, o el empleado no existe.     ║
-            ║      Por favor chequee los datos y vuelva a intentarlo.    ║
-            ╚════════════════════════════════════════════════════════════╝
-            """)
-            
-        else:
-            print("No se encontraron empleados. Revise su base de datos de forma externa o consulte a servicio técnico.")
-    except FileNotFoundError:
-        print("No se encontraron empleados. Revise su base de datos de forma externa o consulte a servicio técnico.")
+                            found+=1
+                        elif (i==len(lista)-1 and found==0):
+                            incorrectDataErr()                 
+                       #Nombre único:    
+                else:
+ 
+                    for i, empleado in enumerate(lista):
+                        id=empleado.id
+                        if (empleado.nombre==Nombre):
+                            #responsiveOptions
+                            if len(str(id))==1:
+                                print(f"""                 ╔═══════════╗
+╔════════════════╣   ID: { id }   ╠════════════════
+║                ╚═══════════╝
+║ \t   ■      Nombre: {empleado.nombre}         
+║ \t   ■       Cargo: {empleado.cargo}          
+║ \t   ■     Salario: {empleado.salario}        
+║ \t   ■  Antigüedad: {empleado.antiguedad}
+║
+╚═════════════════════════════════════════════
 
-###############################################################################################################################################
+            """)
+                            elif len(str(id))==2:
+                                print(f"""                 ╔═══════════╗
+╔════════════════╣   ID: { id }  ╠════════════════
+║                ╚═══════════╝
+║ \t   ■      Nombre: {empleado.nombre}         
+║ \t   ■       Cargo: {empleado.cargo}          
+║ \t   ■     Salario: {empleado.salario}        
+║ \t   ■  Antigüedad: {empleado.antiguedad}
+║
+╚═════════════════════════════════════════════
+
+            """)
+                            elif len(str(id))==3:
+                                print(f"""                 ╔═══════════╗
+╔════════════════╣   ID: { id } ╠════════════════
+║                ╚═══════════╝
+║ \t   ■      Nombre: {empleado.nombre}         
+║ \t   ■       Cargo: {empleado.cargo}          
+║ \t   ■     Salario: {empleado.salario}        
+║ \t   ■  Antigüedad: {empleado.antiguedad}
+║
+╚═════════════════════════════════════════════
+
+            """)
+                            elif len(str(id))==4:
+                                print(f"""                 ╔═══════════╗
+╔════════════════╣   ID: { id }╠════════════════
+║                ╚═══════════╝
+║ \t   ■      Nombre: {empleado.nombre}         
+║ \t   ■       Cargo: {empleado.cargo}          
+║ \t   ■     Salario: {empleado.salario}        
+║ \t   ■  Antigüedad: {empleado.antiguedad}
+║
+╚═════════════════════════════════════════════
+
+            """)
+                            break
+                        else:
+                            if (i==len(lista)-1):
+                                incorrectDataErr()     
+        else:
+            noDataError()
+    except FileNotFoundError:
+        noDataError()
+
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 # Función "Modificar Datos de Empleado":
 
 def modificarDatos():
@@ -138,47 +301,48 @@ def modificarDatos():
         with open("EMPLEADOS.pkl", "rb") as f:
             EMPLEADOS=pickle.load(f)
         
-        Nombre= input("""  
-            ╔═══════════════════════════════════════════════════════════╗
-╔═══════════╣  » Por favor ingrese el nombre del empleado a modificar:  ║
+        Nombre= input("""║  
+║           ╔═══════════════════════════════════════════════════════════╗
+╠═══════════╣  » Por favor ingrese el nombre del empleado a modificar:  ║
 ║           ╚═══════════════════════════════════════════════════════════╝
 ║            » """)
+        Nombre=validStr(Nombre)
         dato= input("""║ 
 ║           ╔═════════════════════════════════════════════╗
 ╠═══════════╣  » Por favor ingrese el dato a modificar:   ║
 ║           ╚═════════════════════════════════════════════╝
 ║            » """)
+        dato=validStr(dato)
         nuevoValor= input(f"""║  
 ║           ╔════════════════════════════════════════════════════════
 ╠═══════════╣  » Por favor ingrese el nuevo valor de {dato}.            
 ║           ╚════════════════════════════════════════════════════════
 ║            » """)
-
+        if dato=="salario":
+            nuevoValor=validNum(nuevoValor)
+        elif dato=="nombre" or dato=="cargo":
+            nuevoValor=validStr(nuevoValor)
+        
         for i, empleado in enumerate(EMPLEADOS):
             if (EMPLEADOS[i].nombre==Nombre):
                 with open("EMPLEADOS.pkl", "wb") as f:
                     setattr(EMPLEADOS[i], dato, nuevoValor)
                     print(f"""║ 
-    ║           ╔═════════════════════════════════════════════════════════════════════
-    ╚═══════════╣  » Para el empleado/a: {Nombre} el {dato} ha sido modificado a:                                
-                ║     {getattr(EMPLEADOS[i], dato)}.                                                              
-                ╚═════════════════════════════════════════════════════════════════════
+║           ╔═════════════════════════════════════════════════════════════════════
+╚═══════════╣  » Para el empleado/a: {Nombre} el {dato} ha sido modificado a:                                
+            ║     {getattr(EMPLEADOS[i], dato)}.                                                              
+            ╚═════════════════════════════════════════════════════════════════════
                 """)
                     pickle.dump(EMPLEADOS, f)
                 break
             else:
                 if (i==len(EMPLEADOS)-1):
-                    print("""║ 
-║           ╔═════════════════════════════════════════════════════════════════════════════════════════════════════════╗
-╚═══════════╣  » El nombre es incorrecto, o el empleado no existe. Por favor chequee los datos y vuelva a intentarlo. ║                                                             ║
-            ╚═════════════════════════════════════════════════════════════════════════════════════════════════════════╝
-            » """)
+                    incorrectDataErr()
     except FileNotFoundError:
-        print("""No se encontraron empleados. Verifique la base de datos o contacte con soporte técnico.
-    """)
+        noDataError()
 
-###############################################################################################################################################
-#Función "Eliminar Empleado":
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+# Función "Eliminar Empleado":
 def eliminarEmpleado():
 
     try:
@@ -187,26 +351,95 @@ def eliminarEmpleado():
 
         if len(EMPLEADOS)>0:
             
-            Nombre= input("» Por favor ingrese el nombre del empleado que desea eliminar del registro: \n")
+            Nombre= input("""║ 
+║   ╔══════════════════════════════════════════════════════════════════════════════════════════════╗
+╠═══╣  » Por favor ingrese el nombre o número de ID del empleado que desea eliminar del registro:  ║
+║   ╚══════════════════════════════════════════════════════════════════════════════════════════════╝
+║     » """)
+            
+            #Busqueda por nombre:
+            if Nombre.isalpha():
+                Nombre= validStr(Nombre)
+                repeat=0
 
-            with open("EMPLEADOS.pkl", "wb") as f:
-
+            #Nombre repetido
                 for i, empleado in enumerate(EMPLEADOS):
                     if (EMPLEADOS[i].nombre==Nombre):
-                        del EMPLEADOS[i]
-                        print(f"El empleado: {Nombre} ha sido eliminado del registro. \n")
-                        pickle.dump(EMPLEADOS, f)
-                        break
-                    if (i==len(EMPLEADOS)-1):
-                        print("El nombre es incorrecto, o el empleado no existe. Por favor chequee los datos y vuelva a intentarlo. \n")
+                        repeat+=1
+                if repeat>=2:
+                    #Busqueda por ID forzada
+                    Nombre= input("""║ 
+║   ╔═══════════════════════════════════════════════════════════════════════════════════════╗
+╠═══╣    » El nombre aparece en múltiples empleados.                                      ║   
+║   ║      Por favor ingrese el número de ID del empleado que desea eliminar del registro:  ║
+║   ╚═══════════════════════════════════════════════════════════════════════════════════════╝
+║     » """)
+                    Nombre= validNum(Nombre)
+
+                    with open("EMPLEADOS.pkl", "wb") as f:
+                        for i, empleado in enumerate(EMPLEADOS):
+                            if (EMPLEADOS[i].id==int(Nombre)):
+                                del EMPLEADOS[i]
+                                print(f"""║
+║   ╔═════════════════════════════════════════════════════════════════════════════
+╚═══╣  ■ El empleado con número de ID: {Nombre} ha sido eliminado del registro.  
+    ╚═════════════════════════════════════════════════════════════════════════════
+            """)
+                                pickle.dump(EMPLEADOS, f)
+                                break
+                            
+                            if (i==len(EMPLEADOS)-1):
+                                incorrectDataErr()                 
+            #Nombre único
+                else:
+                    for i, empleado in enumerate(EMPLEADOS):
+                        if (EMPLEADOS[i].nombre==Nombre):
+                            del EMPLEADOS[i]
+                            print(f"""║
+║   ╔════════════════════════════════════════════════════════════════════
+╚═══╣  ■ El empleado: {Nombre} ha sido eliminado del registro.  
+    ╚════════════════════════════════════════════════════════════════════
+        """)
+                            pickle.dump(EMPLEADOS, f)
+                            break
+                        
+                        if (i==len(EMPLEADOS)-1):
+                            incorrectDataErr()
+        
+            #Busqueda por ID:
+            elif Nombre.isalnum():
+                Nombre= validNum(Nombre)
+
+                with open("EMPLEADOS.pkl", "wb") as f:
+                    for i, empleado in enumerate(EMPLEADOS):
+                        if (EMPLEADOS[i].id==int(Nombre)):
+                            del EMPLEADOS[i]
+                            print(f"""║
+║   ╔═════════════════════════════════════════════════════════════════════════════
+╚═══╣  ■ El empleado con número de ID: {Nombre} ha sido eliminado del registro.  
+    ╚═════════════════════════════════════════════════════════════════════════════
+        """)
+                            pickle.dump(EMPLEADOS, f)
+                            break
+                        
+                        if (i==len(EMPLEADOS)-1):
+                            incorrectDataErr()
+            else:
+                print("""
+            ╔════════════════════════════════════════════════════════╗
+            ║  ■ No es un dato valido.                               ║
+            ║    Por favor, ingrese sólo palabras o sólo números.    ║
+            ╚════════════════════════════════════════════════════════╝ 
+            """)
+                # eliminarEmpleado()
         else:
-            print("No se encontraron empleados. Revise su base de datos de forma externa o consulte a servicio técnico.")
+            noDataError()
 
     except FileNotFoundError:
-        print("No se encontraron empleados. Revise su base de datos de forma externa o consulte a servicio técnico.")
+       noDataError()
 
-###############################################################################################################################################
-#Función Menú Principal:
+#■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+# Función Menú Principal:
 def opciones():
     option=input("""
                  ╔═══════════════════════════════════════════════════════════════╗
@@ -218,8 +451,8 @@ def opciones():
 ║ \t\t   ■      4»  Eliminar un empleado del registro.                                 ║
 ║ \t\t   ■      5»  Cerrar el programa.                                                ║
 ║                                                                                                ║
-╚════════════════════════════════════════════════════════════════════════════════════════════════╝
-      » """)
+╠════════════════════════════════════════════════════════════════════════════════════════════════╝
+║     » """)
 
     if (option=="1"):
         crearEmpleado()
@@ -232,10 +465,14 @@ def opciones():
     elif (option=="5"):
         keepRunning()
     else:
-        print("La opción seleccionada no es válida.\n")
+        print("""
+    \t\t        ╔═══════════════════════════════════════════╗
+    \t\t        ║  ■ La opción seleccionada no es válida.   ║                                             
+    \t\t        ╚═══════════════════════════════════════════╝
+            """)
         main()
 
-#Salir del programa:
+# Salir del programa:
 def keepRunning():
 
     choice=""
@@ -243,13 +480,19 @@ def keepRunning():
     \t\t        ╔═════════════════════════════════════════════════╗
     \t\t        ║ » ¿Desea realizar alguna otra operación? (S/N)  ║                                             
     \t\t        ╚═════════════════════════════════════════════════╝
-     » """)
-    if (choice!="S" and choice!="N"):
-        print("» No es una opción válida. Por favor ingrese: (S/N) \n")
+     \t» """)
+    choice=validStr(choice)
+
+    if (choice!="s" and choice!="n"):
+        print("""
+    \t        ╔══════════════════════════════════════════════════════╗
+    \t        ║ » No es una opción válida. Por favor ingrese: (S/N)  ║                                             
+    \t        ╚══════════════════════════════════════════════════════╝
+     \t» """)
         keepRunning()
     return choice
 
-#Definición de la Ejecución principal del programa
+# Definición de la Ejecución principal del programa
 def main():
 
     while True:
@@ -258,8 +501,9 @@ def main():
 
         keepRunning()
 
-        if (keepRunning()=="N"):
+        if (keepRunning()=="n"):
             break
 
-#Ejecución de la Pantalla del Usuario:
-main()
+# Ejecución de la Pantalla del Usuario:
+if __name__=="__main__":
+    main()
