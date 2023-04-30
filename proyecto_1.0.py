@@ -410,20 +410,29 @@ def eliminarEmpleado():
             elif Nombre.isalnum():
                 Nombre= validNum(Nombre)
 
-                with open("EMPLEADOS.pkl", "wb") as f:
-                    for i, empleado in enumerate(EMPLEADOS):
-                        if (EMPLEADOS[i].id==int(Nombre)):
-                            del EMPLEADOS[i]
-                            print(f"""║
+                # Abrir el archivo .pkl y cargar la estructura de datos
+                with open("EMPLEADOS.pkl", "rb") as f:
+                    EMPLEADOS = pickle.load(f)
+
+                if (not EMPLEADOS):
+                    incorrectDataErr()
+
+                # Buscar el registro por ID
+                for i, empleado in enumerate(EMPLEADOS):
+                    if (empleado.id == int(Nombre)):
+                        # Buscar el registro por ID
+                        EMPLEADOS.pop(i)
+                        print(f"""║
 ║   ╔═════════════════════════════════════════════════════════════════════════════
 ╚═══╣  ■ El empleado con número de ID: {Nombre} ha sido eliminado del registro.  
-    ╚═════════════════════════════════════════════════════════════════════════════
-        """)
-                            pickle.dump(EMPLEADOS, f)
-                            break
+╚═════════════════════════════════════════════════════════════════════════════
+    """)
+                        break
+
+                # Guardar los cambios en el archivo .pkl
+                with open('EMPLEADOS.pkl', 'wb') as f:
+                    pickle.dump(EMPLEADOS, f)    
                         
-                        if (i==len(EMPLEADOS)-1):
-                            incorrectDataErr()
             else:
                 print("""
             ╔════════════════════════════════════════════════════════╗
